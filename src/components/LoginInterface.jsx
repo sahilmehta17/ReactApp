@@ -3,7 +3,6 @@ import LoginPage from './LoginPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import ForgotUsernamePage from './ForgotUsernamePage';
 
-//const city = ("New York");
 const API_Key = ('6170fae6025247da95f213929251106');
 
 function LoginInterface() {
