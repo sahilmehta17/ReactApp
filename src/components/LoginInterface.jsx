@@ -13,7 +13,7 @@ function LoginInterface() {
     
     useEffect(() => { 
         async function weatherFetch (lat, lon) {
-            const url = `https://api.weatherapi.com/v1/current.json?key=${API_Key}&q=${lat},q=${lon}`;
+            const url = `https://api.weatherapi.com/v1/current.json?key=${API_Key}&q=${lat},${lon}`;
 
             try {
                 const res = await fetch (url);
@@ -56,7 +56,7 @@ function LoginInterface() {
             
             {weather && (
                 <div className="weather-data">
-                    <h2>Weather  in {city}</h2>
+                    <h2>Weather  in {weather?.city}</h2>
                     {new Date(weather.localtime).toLocaleDateString('en-US', { weekday: 'long' })}: {weather.temp_f}°F
                 </div>
             )}
