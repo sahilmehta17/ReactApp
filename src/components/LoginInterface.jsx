@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LoginPage from './LoginPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import ForgotUsernamePage from './ForgotUsernamePage';
+import RegisterPage from './RegisterPage';
 
 const API_Key = ('6170fae6025247da95f213929251106');
 
@@ -60,8 +61,15 @@ function LoginInterface() {
                 </div>
             )}
                 
+            {pageType === 'register' &&
+            (<RegisterPage onBackToLogin={() => setPageType('login')} />)
+            }
+
             {pageType === 'login' && 
-                (<LoginPage onForgotPassword={() => setPageType('forgotPassword')} onForgotUsername={() => setPageType('forgotUsername')}/>)
+                (<LoginPage 
+                    onForgotPassword={() => setPageType('forgotPassword')}
+                    onGoToRegister={() => setPageType('register')} 
+                    onForgotUsername={() => setPageType('forgotUsername')}/>)
             }
            
             {pageType === 'forgotPassword' && 

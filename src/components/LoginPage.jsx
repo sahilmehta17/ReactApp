@@ -1,13 +1,30 @@
 import React, {useState} from "react";
 
-function LoginPage({onForgotPassword, onForgotUsername}) {
+function LoginPage({onGoToRegister, onForgotPassword, onForgotUsername}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log("Logging in with", { username, password });
-        alert("Awaiting Login API");
+        try {
+            const res = await fetch('http://localhost:3001/api/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                alert(`Welcome, ${data.user.username}! Token: ${data.token}`);
+                localStorage.setItem('token', data.token);
+            } else { 
+                alert(data.error || 'Login failed');
+            }
+        } catch (e) {
+            console.log('Login failed!', e)
+            alert('Network Error');
+        }
     };
 
     return (
@@ -34,6 +51,7 @@ function LoginPage({onForgotPassword, onForgotUsername}) {
             </form>
 
             <div>
+                <button onClick={onGoToRegister}>Register</button>
                 <button onClick={onForgotPassword}>Forgot Password?</button>
                 <button onClick={onForgotUsername}>Forgot Username?</button>
             </div>

@@ -7,12 +7,12 @@ function ForgotUsernamePage ({onBack}) {
         e.preventDefault();
 
         console.log("Sending username recovery to", { email });
-        alert("Forgot Username API PH");
+        alert("Awaiting Forgot Username API");
     }
 
     return (
         <div className="forgot-username-page">
-          <h2>Forgot username</h2>
+          <h2>Forgot Username</h2>
           
           <form onSubmit={handleForgotUsername}>
             <input

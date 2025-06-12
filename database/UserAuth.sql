@@ -1,0 +1,20 @@
+CREATE DATABASE UserAuth;
+GO
+
+USE UserAuth;
+GO
+
+CREATE TABLE Users (
+  id INT PRIMARY KEY IDENTITY(1,1),
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  otp_code VARCHAR(6),
+  otp_expires DATETIME
+);
+
+USE UserAuth;
+GO
+
+SELECT * FROM Users;
+GO
