@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import ReactDOM from 'react-DOM';
+import ReactDOM from 'react-dom';
 
 function RegisterPage({onBackToLogin}) {
     const [username, setUsername] = useState('');
