@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 
-function RegisterPage({onBackToLogin}) {
+function RegisterPage({onBackToLogin, onOtpSent}) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -18,11 +18,12 @@ function RegisterPage({onBackToLogin}) {
             const data = await res.json();
 
             if (res.ok) {
-                alert('Registration successful. You can now log in.');
-                onBackToLogin();
+                alert('OTP sent. Verify your email!');
+                onOtpSent(email);
             } else {
                 alert(data.error || 'Registration failed.');
             }
+
         } catch (e) {
             console.error('Registration error:', e);
             alert('Network error. Please try again later.');

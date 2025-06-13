@@ -3,6 +3,7 @@ import LoginPage from './LoginPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import ForgotUsernamePage from './ForgotUsernamePage';
 import RegisterPage from './RegisterPage';
+import OtpVerificationPage from './OtpVerificationPage';
 
 const API_Key = ('6170fae6025247da95f213929251106');
 
@@ -10,7 +11,8 @@ function LoginInterface() {
 
     const [weather, setWeather] = useState(null);
     const [pageType, setPageType] = useState('login');
-    
+    const [emailToVerify, setEmailToVerify] = useState('');
+
     useEffect(() => { 
         async function weatherFetch (lat, lon) {
             const url = `https://api.weatherapi.com/v1/current.json?key=${API_Key}&q=${lat},${lon}`;
@@ -62,7 +64,13 @@ function LoginInterface() {
             )}
                 
             {pageType === 'register' &&
-            (<RegisterPage onBackToLogin={() => setPageType('login')} />)
+                (<RegisterPage 
+                    onBackToLogin={() => setPageType('login')}
+                    onOtpSent={(email) => {
+                        setEmailToVerify(email);
+                        setPageType('verifyOtp');
+                    }} 
+                />)
             }
 
             {pageType === 'login' && 
@@ -72,14 +80,18 @@ function LoginInterface() {
                     onForgotUsername={() => setPageType('forgotUsername')}/>)
             }
            
-            {pageType === 'forgotPassword' && 
+           {pageType === 'forgotPassword' && 
                 (<ForgotPasswordPage onBack={() => setPageType('login')} />)
            }
            
-            {pageType === 'forgotUsername' && 
+           {pageType === 'forgotUsername' && 
                 (<ForgotUsernamePage onBack={() => setPageType('login')} />)
            }
         
+            {pageType === 'verifyOtp' && 
+            (<OtpVerificationPage email={emailToVerify} onBackToLogin={() => setPageType('login')} />)
+            }
+
         </div>
     )
 
