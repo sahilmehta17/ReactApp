@@ -28,19 +28,21 @@ function OtpVerificationPage({ email, onBackToLogin }) {
 
     return (
         <div className="otp-verification-page">
-            <h2>Verify Your Email</h2>
-            <p>Enter the OTP sent to {email}</p>
-            <form onSubmit={handleVerify}>
-                <input
-                    type="text"
-                    placeholder="Enter OTP"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    required
-                />
-                <button type="submit">Verify</button>
-            </form>
-            <button onClick={onBackToLogin}>Back to Login</button>
+            <div className="form-card">
+                <h2>Verify Your Email</h2>
+                <p>Enter the OTP sent to {email}</p>
+                <form onSubmit={handleVerify}>
+                    <input
+                        type="text"
+                        placeholder="Enter OTP"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        required
+                    />
+                    <button type="submit">Verify</button>
+                </form>
+                <button className="back-button" onClick={onBackToLogin}>Back to Login</button>
+            </div>
         </div>
     );
 }

@@ -32,32 +32,35 @@ function RegisterPage({onBackToLogin, onOtpSent}) {
 
     return (
         <div className="register-page">
-            <h1>Register</h1>
-            <form onSubmit={handleRegister}>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">Register</button>
-            </form>
-            <button onClick={onBackToLogin}>Back to Login</button>
+            <div className="form-card">
+                <h1>Register</h1>
+                <form onSubmit={handleRegister}>
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <button type="submit">Register</button>
+                </form>
+                <button className="back-button" onClick={onBackToLogin}>Back to Login</button>
+            
+            </div>
         </div>
     );
 }

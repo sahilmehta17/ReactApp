@@ -17,12 +17,12 @@ CREATE TABLE Users (
 USE UserAuth;
 GO
 
-DELETE FROM Users WHERE email = 'sahilmehta0204@gmail.com';
-GO
-DELETE FROM Users WHERE email = 'smehta27@wisc.edu';
+DELETE FROM Users where email='smehta27@wisc.edu';
 GO
 
 SELECT username, email, is_verified FROM Users WHERE email = 'smehta27@wisc.edu';
+GO
 
 SELECT * FROM Users;
 GO
+

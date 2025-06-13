@@ -57,3 +57,69 @@ button:hover {
   color: black;
   background-color: #00c2ab;
 }
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-card {
+  background-color: #1e1e1e;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 320px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.or-divider {
+  margin: 1rem 0;
+  text-align: center;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.forgot-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: -0.5rem;
+}
+
+.forgot-buttons button {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  margin: 0;
+  background: none;
+  color: #aaa;
+  font-weight: normal;
+}
+
+.forgot-buttons button:hover {
+  text-decoration: underline;
+  background: none;
+  color: #fff;
+}
+
+.back-button {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  background: none;
+  color: #aaa;
+  margin-top: 0.5rem;
+  margin-left: 0;
+  align-self: flex-start;
+}
+
+.back-button:hover {
+  color: #fff;
+  text-decoration: underline;
+  background: none;
+}

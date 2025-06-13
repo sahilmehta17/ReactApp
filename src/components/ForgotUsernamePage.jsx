@@ -2,31 +2,47 @@ import React, {useState} from "react";
 
 function ForgotUsernamePage ({onBack}) {
     const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleForgotUsername = async (e) => {
         e.preventDefault();
+        try {
+            const res = await fetch('http://localhost:3001/api/forgot-username', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
 
-        console.log("Sending username recovery to", { email });
-        alert("Awaiting Forgot Username API");
-    }
+            const data = await res.json();
+
+            if (res.ok) {
+                setMessage('Your username has been sent to your email.');
+            } else {
+                setMessage(data.error || 'Failed to retrieve username.');
+            }
+        } catch (e) {
+            console.error('Forgot Username Error:', e);
+            setMessage('Network error. Try again.');
+        }
+    };
 
     return (
         <div className="forgot-username-page">
-          <h2>Forgot Username</h2>
-          
-          <form onSubmit={handleForgotUsername}>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <button type="submit">Send Link</button>
-          </form>
-          
-          <div>
-            <button onClick={onBack}>Back to Login</button>
+          <div className="form-card">
+            <h2>Forgot Username</h2>
+            
+            <form onSubmit={handleForgotUsername}>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button type="submit">Send Link</button>
+            </form>
+            {message && <p>{message}</p>}
+            <button className="back-button" onClick={onBack}>Back to Login</button>
           </div>
         </div>
       );

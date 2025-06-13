@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-function LoginPage({onGoToRegister, onForgotPassword, onForgotUsername}) {
+function LoginPage({onGoToRegister, onForgotPassword, onForgotUsername, onOtpVer}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -29,31 +29,37 @@ function LoginPage({onGoToRegister, onForgotPassword, onForgotUsername}) {
 
     return (
         <div className="login-page">
-            <h1> Welcome to ENIDUS!</h1>
-            <h2>Login</h2>
+            <div className="form-card">
+                <h1> Welcome to ENIDUS!</h1>
+                <h2>Login</h2>
 
-            <form onSubmit={handleLogin}>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <button type="submit">Login</button>
-            </form>
+                <form onSubmit={handleLogin}>
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <button type="submit">Login</button>
+                </form>
 
-            <div>
+                <div className="forgot-buttons">
+                    <button onClick={onForgotPassword}>Forgot Password?</button>
+                    <button onClick={onForgotUsername}>Forgot Username?</button>
+                </div>
+
+
+                <div className="or-divider">OR</div>
                 <button onClick={onGoToRegister}>Register</button>
-                <button onClick={onForgotPassword}>Forgot Password?</button>
-                <button onClick={onForgotUsername}>Forgot Username?</button>
+
             </div>
         </div>
     );

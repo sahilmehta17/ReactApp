@@ -46,6 +46,9 @@ app.post('/api/register', async (req, res) => {
       res.status(200).json({ message: 'OTP sent to email. Awaiting verification.' });
     } catch (e) {
       console.error('Registration + OTP error:', e);
+      if (e.message.includes('Violation of UNIQUE KEY') || e.message.includes('duplicate')) {
+        return res.status(409).json({ error: 'User already exists. Try registering with a different email or username.' });
+      }
       res.status(500).json({ error: 'Failed to register and send OTP' });
     }
 });
@@ -135,6 +138,119 @@ app.post('/api/verify-otp', async (req, res) => {
   });
   
   
+  app.post('/api/forgot-username', async (req, res) => {
+    await poolConnect;
+    const { email } = req.body;
+
+    try {
+        const result = await pool.request()
+            .input('email', sql.VarChar, email)
+            .query('SELECT username, is_verified FROM Users WHERE email = @email');
+
+        const user = result.recordset[0];
+
+        if (!user) {
+            return res.status(404).json({ error: 'No account found with that email.' });
+        }
+
+        if (!user.is_verified || user.is_verified != 1) {
+            return res.status(403).json({ error: 'Email not verified.' });
+        }
+
+        await sgMail.send({
+            to: email,
+            from: 'sahilmehta0204@gmail.com',
+            subject: 'Your Username',
+            text: `Your username is: ${user.username}`,
+        });
+
+        res.status(200).json({ message: 'Username has been sent to your email.' });
+
+    } catch (e) {
+        console.error('Forgot Username error:', e);
+        res.status(500).json({ error: 'Failed to process request.' });
+    }
+});
+
+app.post('/api/request-password-reset', async (req, res) => {
+    await poolConnect;
+    const { email } = req.body;
+
+    try {
+        const otp = generateOTP();
+        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+
+        const result = await pool.request()
+            .input('email', sql.VarChar, email)
+            .input('otp_code', sql.VarChar, otp)
+            .input('otp_expires', sql.DateTime, otpExpiry)
+            .query(`
+                UPDATE Users 
+                SET otp_code = @otp_code, otp_expires = @otp_expires 
+                WHERE email = @email
+            `);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ error: 'No user with that email.' });
+        }
+
+        await sgMail.send({
+            to: email,
+            from: 'sahilmehta0204@gmail.com',
+            subject: 'Password Reset OTP',
+            text: `Use this OTP to reset your password: ${otp}`
+        });
+
+        res.status(200).json({ message: 'OTP sent to your email.' });
+
+    } catch (err) {
+        console.error('Request password reset error:', err);
+        res.status(500).json({ error: 'Could not send OTP.' });
+    }
+});
+
+app.post('/api/forgot-password', async (req, res) => {
+  await poolConnect;
+  const { email, otp, newPassword } = req.body;
+
+  try {
+      const result = await pool.request()
+          .input('email', sql.VarChar, email)
+          .query(`SELECT otp_code, otp_expires FROM Users WHERE email = @email`);
+
+      const user = result.recordset[0];
+
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+
+      const now = new Date();
+      const isExpired = new Date(user.otp_expires) < now;
+      const isMatch = user.otp_code === otp;
+
+      if (isExpired) {
+          return res.status(400).json({ error: 'OTP expired' });
+      }
+
+      if (!isMatch) {
+          return res.status(400).json({ error: 'Invalid OTP' });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      await pool.request()
+          .input('email', sql.VarChar, email)
+          .input('password_hash', sql.VarChar, hashedPassword)
+          .query(`UPDATE Users SET password_hash = @password_hash, otp_code = NULL, otp_expires = NULL WHERE email = @email`);
+
+      res.status(200).json({ message: 'Password reset successfully' });
+  } catch (err) {
+      console.error('Reset password error:', err);
+      res.status(500).json({ error: 'Password reset failed' });
+  }
+});
+
+
 app.listen(3001, () => {
   console.log('Backend running on http://localhost:3001');
 });
